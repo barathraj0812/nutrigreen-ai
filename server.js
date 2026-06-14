@@ -343,6 +343,15 @@ async function api(req, res, path) {
       return json(res, 200, calculateHealth(body.profile || body));
     }
     if (path === "/api/foods" && req.method === "GET") return json(res, 200, { foods: indianFoods });
+    if (path === "/api/search-food" && req.method === "POST") {
+
+    const body = await readJson(req);
+
+    const food = await searchFood(body.food);
+
+    return json(res, 200, food);
+
+    }
     if (path === "/api/meal-plan" && req.method === "POST") {
       const body = await readJson(req);
       const systemInstruction = "You are an expert Indian nutritionist. Return only a valid JSON array of exactly four food plan objects for a full day. Each object must contain type, name, items, cal, protein, carbs, fats, fiber, and reason. Use neutral timeline labels such as Morning, Midday, Evening, and Later. Use numbers for nutrition fields.";
